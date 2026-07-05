@@ -1,4 +1,6 @@
-import pygame
+import contextlib
+with contextlib.redirect_stdout(None):
+    import pygame
 import sys
 import random 
 from pygame.math import Vector2 as V2
@@ -22,6 +24,7 @@ class SNAKE:
     def __init__(self):
         self.body = [V2(5,10),V2(6,10),V2(7,10)]
         self.direction = V2(1,0)
+        self.new_block = False
 
     def draw_snake(self):
         for block in self.body:
@@ -31,19 +34,30 @@ class SNAKE:
             pygame.draw.rect(screen,SNAKE_COLOR,snake_rect)
 
     def move_snake(self):
-        body_copy = self.body[:-1]
-        body_copy.insert(0,body_copy[0]+self.direction)
-        self.body = body_copy[:]
+        if self.new_block == True:
+            body_copy = self.body[:]
+            body_copy.insert(0,body_copy[0]+self.direction)
+            self.body = body_copy[:]
+            self.new_block = False
+        else:
+            body_copy = self.body[:-1]
+            body_copy.insert(0,body_copy[0]+self.direction)
+            self.body = body_copy[:]
+
+    def add_block(self):
+        self.new_block = True
 
 class FRUIT:
     def __init__(self):
-        self.x  = random.randint(0,cell_number-1)
-        self.y = random.randint(0,cell_number-1)
-        self.pos = V2(self.x , self.y) 
-
+        self.randomize()
     def draw_fruit(self):
         fruit_rect = pygame.Rect(self.pos.x * cell_size,self.pos.y*cell_size,cell_size,cell_size)
         pygame.draw.rect(screen,FRUIT_COLOR,fruit_rect)
+
+    def randomize(self):
+        self.x  = random.randint(0,cell_number-1)
+        self.y = random.randint(0,cell_number-1)
+        self.pos = V2(self.x , self.y) 
 
 class PIPES:
     def __init__(self):
@@ -60,10 +74,12 @@ class PIPES:
             'x':x_pixel_pos,
             'top_end':top_pipe_end,
             'bottom_start':bottom_pipe_start,
-            'spawned_next': False
+            'spawned_next': False,
+            'scored':False
+
         }
         self.pipes_list.append(new_pipe)
-        print(f'[Debug] new pipe at x={x_pixel_pos}, Gap:(Y1={top_pipe_end} Y2={bottom_pipe_start}) ')
+        #print(f'[Debug] new pipe at x={x_pixel_pos}, Gap:(Y1={top_pipe_end} Y2={bottom_pipe_start}) ')
 
     def move_pipes(self):
         for pipe in self.pipes_list:
@@ -71,8 +87,8 @@ class PIPES:
         old_count = len(self.pipes_list)
         self.pipes_list= [pipe for pipe in self.pipes_list if pipe['x']>=-cell_size]
 
-        if len(self.pipes_list)< old_count:
-            print(f'[Debug] Out of screen pips had removed')
+        #if len(self.pipes_list)< old_count:
+            #print(f'[Debug] Out of screen pips had removed')
 
     def draw_pipes(self):
         if len(self.pipes_list)== 0:
@@ -104,6 +120,7 @@ class MAIN:
         self.fruit = FRUIT()
         self.pipes = PIPES()
         self.snake_timer = 0
+        self.score =0
 
     def update(self):
         self.pipes.move_pipes()
@@ -114,6 +131,7 @@ class MAIN:
             self.snake.move_snake()
             self.check_snake_fruit_collision()
             self.check_snake_pipe_collision()
+            self.check_pipe_passing()
             self.snake_timer=0
 
     def draw_elemnts(self):
@@ -133,22 +151,27 @@ class MAIN:
 
     def check_snake_fruit_collision(self):
         if self.fruit.pos == self.snake.body[0]:
-            print(f'[Debug] Snake and apple Colided')
+            self.fruit.randomize()
+            self.snake.add_block()
+            fruit_points = random.randint(49,74)
+            print(f'[Debug] Eat apple. added: {fruit_points}')
+            self.score += fruit_points
 
     def check_snake_pipe_collision(self):
         snake_head = self.snake.body[0]
 
-        for pipe in self.pipes.pipes_list:
-            pipe_grid_x = pipe['x'] // cell_size
-            if snake_head.x == pipe_grid_x:
-                if snake_head.y < pipe['top_end']:
-                    print("[Debug] Snake collided with TOP pipe!")
-                elif snake_head.y >= pipe['bottom_start']:
-                    print("[Debug] Snake collided with BOTTOM pipe!")
+        #for pipe in self.pipes.pipes_list:
+            #pipe_grid_x = pipe['x'] // cell_size
+            #if snake_head.x == pipe_grid_x:
+                #if snake_head.y < pipe['top_end']:
+                    #print("[Debug] Snake collided with TOP pipe!")
+                #elif snake_head.y >= pipe['bottom_start']:
+                    #print("[Debug] Snake collided with BOTTOM pipe!")
 
     def check_if_game_close(self):
         for event in pygame.event.get(): 
             if event.type == pygame.QUIT:
+                print(f'Final Score {self.score}')
                 pygame.quit()
                 sys.exit()
             if event.type == SCREEN_UPDATE:
@@ -156,10 +179,22 @@ class MAIN:
             if event.type == pygame.KEYDOWN:
                 self.inputs(event)
 
+    def check_pipe_passing(self):
+        snake_head = self.snake.body[0]
+        for pipe in self.pipes.pipes_list:
+            pipe_grid_x = pipe['x'] // cell_size
+            
+            if snake_head.x > pipe_grid_x and not pipe['scored']:
+                if pipe['top_end'] <= snake_head.y < pipe['bottom_start']:
+                    pipe['scored'] = True
+                    pipe_points = random.randint(9,23)
+                    self.score += pipe_points
+                    print(f'[Debug] Snake passed throw a Pipe.. add score {pipe_points}')
 
 pygame.init()
 
-screen = pygame.display.set_mode((cell_number*cell_size,cell_number*cell_size))
+screen_cord = cell_number*cell_size
+screen = pygame.display.set_mode((screen_cord,screen_cord))
 clock = pygame.time.Clock()
 
 SCREEN_UPDATE = pygame.USEREVENT
