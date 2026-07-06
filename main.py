@@ -5,9 +5,11 @@ import sys
 import random 
 from pygame.math import Vector2 as V2
 
+pygame.init()
+
 #Grid & Screen Settings
-cell_size = 45
-cell_number =22
+cell_size = 34
+cell_number =25
 
 #Pipe Settings
 pipe_speed = 2
@@ -24,6 +26,7 @@ class SNAKE:
     def __init__(self):
         self.body = [V2(5,10),V2(4,10),V2(3,10)]
         self.direction = V2(1,0)
+        self.last_moved_direction = V2(1,0)
         self.new_block = False
 
     def draw_snake(self):
@@ -34,6 +37,7 @@ class SNAKE:
             pygame.draw.rect(screen,SNAKE_COLOR,snake_rect)
 
     def move_snake(self):
+        self.last_moved_direction = self.direction
         if self.new_block == True:
             body_copy = self.body[:]
             body_copy.insert(0,body_copy[0]+self.direction)
@@ -51,8 +55,10 @@ class FRUIT:
     def __init__(self):
         self.randomize()
     def draw_fruit(self):
-        fruit_rect = pygame.Rect(self.pos.x * cell_size,self.pos.y*cell_size,cell_size,cell_size)
-        pygame.draw.rect(screen,FRUIT_COLOR,fruit_rect)
+        x_pos = int(self.pos.x * cell_size)
+        y_pos = int(self.pos.y * cell_size) 
+        fruit_rect = pygame.Rect(x_pos - 3, y_pos - 3, 40, 40)
+        screen.blit(apple, fruit_rect)
 
     def randomize(self):
         self.x  = random.randint(0,cell_number-1)
@@ -141,16 +147,16 @@ class MAIN:
 
     def inputs(self, event):
         if event.key == pygame.K_w or event.key == pygame.K_UP:
-            if self.snake.direction.y != 1:
+            if self.snake.last_moved_direction.y != 1:
                 self.snake.direction = V2(0, -1)   
         if event.key == pygame.K_s or event.key == pygame.K_DOWN:
-            if self.snake.direction.y != -1:
+            if self.snake.last_moved_direction.y != -1:
                 self.snake.direction = V2(0, 1) 
         if event.key == pygame.K_a or event.key == pygame.K_LEFT:
-            if self.snake.direction.x != 1:
+            if self.snake.last_moved_direction.x != 1:
                 self.snake.direction = V2(-1, 0)
         if event.key == pygame.K_d or event.key == pygame.K_RIGHT:
-            if self.snake.direction.x != -1:
+            if self.snake.last_moved_direction.x != -1:
                 self.snake.direction = V2(1, 0)
 
     def check_snake_fruit_collision(self):
@@ -171,7 +177,7 @@ class MAIN:
 
         for block in self.snake.body[1:]:
             if block == self.snake.body[0]:
-                self.game_over
+                self.game_over()
 
         snake_head = self.snake.body[0]
         for pipe in self.pipes.pipes_list:
@@ -209,10 +215,10 @@ class MAIN:
                     self.score += pipe_points
                     print(f'[Debug] Snake passed throw a Pipe.. add score {pipe_points}')
 
-pygame.init()
 
-screen_cord = cell_number*cell_size
-screen = pygame.display.set_mode((screen_cord,screen_cord))
+screen_cords = cell_number * cell_size
+screen = pygame.display.set_mode((screen_cords, screen_cords))
+apple = pygame.image.load('Graphics/apple.png').convert_alpha() 
 clock = pygame.time.Clock()
 
 SCREEN_UPDATE = pygame.USEREVENT
