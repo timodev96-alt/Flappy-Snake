@@ -9,12 +9,12 @@ from pygame.math import Vector2 as V2
 cell_size = 45
 cell_number =22
 
-#Pipe settings
+#Pipe Settings
 pipe_speed = 2
 top_bottom_pipe_space = 4
 pipe_to_pipe_space = 500
 
-#Colors
+#Color Settings
 BG_COLOR = (10,23,250)
 SNAKE_COLOR = (183,111,122)
 FRUIT_COLOR = (194, 54, 22)
@@ -22,7 +22,7 @@ PIPE_COLOR = (34,139,30)
 
 class SNAKE:
     def __init__(self):
-        self.body = [V2(5,10),V2(6,10),V2(7,10)]
+        self.body = [V2(5,10),V2(4,10),V2(3,10)]
         self.direction = V2(1,0)
         self.new_block = False
 
@@ -98,7 +98,7 @@ class PIPES:
 
             for y in range(0, pipe['top_end']):
                 pipe_rect = pygame.Rect(pipe['x'], y*cell_size , cell_size , cell_size)
-                pygame.draw.rect(screen,(34,139,34), pipe_rect)
+                pygame.draw.rect(screen,PIPE_COLOR, pipe_rect)
 
             for y in range(pipe['bottom_start'],cell_number):
                 pipe_rect = pygame.Rect(pipe['x'], y*cell_size , cell_size , cell_size)
@@ -125,12 +125,12 @@ class MAIN:
     def update(self):
         self.pipes.move_pipes()
         self.pipes.check_and_spawn()
+        self.check_lose()
 
         self.snake_timer += 1
         if self.snake_timer >= 9:
             self.snake.move_snake()
             self.check_snake_fruit_collision()
-            self.check_snake_pipe_collision()
             self.check_pipe_passing()
             self.snake_timer=0
 
@@ -139,15 +139,19 @@ class MAIN:
         self.snake.draw_snake()
         self.pipes.draw_pipes()
 
-    def inputs(self,event):
+    def inputs(self, event):
         if event.key == pygame.K_w or event.key == pygame.K_UP:
-            self.snake.direction = V2(0,-1)
+            if self.snake.direction.y != 1:
+                self.snake.direction = V2(0, -1)   
         if event.key == pygame.K_s or event.key == pygame.K_DOWN:
-            self.snake.direction = V2(0,1)
+            if self.snake.direction.y != -1:
+                self.snake.direction = V2(0, 1) 
         if event.key == pygame.K_a or event.key == pygame.K_LEFT:
-            self.snake.direction = V2(-1,0)
+            if self.snake.direction.x != 1:
+                self.snake.direction = V2(-1, 0)
         if event.key == pygame.K_d or event.key == pygame.K_RIGHT:
-            self.snake.direction = V2(1,0)
+            if self.snake.direction.x != -1:
+                self.snake.direction = V2(1, 0)
 
     def check_snake_fruit_collision(self):
         if self.fruit.pos == self.snake.body[0]:
@@ -157,16 +161,30 @@ class MAIN:
             print(f'[Debug] Eat apple. added: {fruit_points}')
             self.score += fruit_points
 
-    def check_snake_pipe_collision(self):
-        snake_head = self.snake.body[0]
+    def check_lose(self):
+        if not 0 <= self.snake.body[0].x < cell_number:
+            print(f'[Debug] snake touched itself')
+            self.game_over()
+        elif not 0 <= self.snake.body[0].y < cell_number:
+            print(f'[Debug] snake touched itself')
+            self.game_over()
 
-        #for pipe in self.pipes.pipes_list:
-            #pipe_grid_x = pipe['x'] // cell_size
-            #if snake_head.x == pipe_grid_x:
-                #if snake_head.y < pipe['top_end']:
-                    #print("[Debug] Snake collided with TOP pipe!")
-                #elif snake_head.y >= pipe['bottom_start']:
-                    #print("[Debug] Snake collided with BOTTOM pipe!")
+        for block in self.snake.body[1:]:
+            if block == self.snake.body[0]:
+                self.game_over
+
+        snake_head = self.snake.body[0]
+        for pipe in self.pipes.pipes_list:
+            pipe_grid_x = pipe['x'] // cell_size
+            if snake_head.x == pipe_grid_x:
+                if snake_head.y < pipe['top_end'] or snake_head.y >= pipe['bottom_start']:
+                    print("[Debug] Snake hit a pipe!")
+                    self.game_over()
+    
+    def game_over(self):
+        print(f'Final Score {self.score}')
+        pygame.quit()
+        sys.exit()
 
     def check_if_game_close(self):
         for event in pygame.event.get(): 
