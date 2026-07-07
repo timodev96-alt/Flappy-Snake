@@ -15,6 +15,8 @@ class MAIN:
         self.snake_timer = 0
         self.score = 0
 
+        self.input_queue = []
+
     def update(self):
         self.pipes.move_pipes()
         self.pipes.check_and_spawn()
@@ -23,6 +25,8 @@ class MAIN:
 
         self.snake_timer += 1
         if self.snake_timer >= 9:
+            if self.input_queue:
+                self.snake.direction = self.input_queue.pop(0)
             self.snake.move_snake()
             self.check_snake_fruit_collision()
             self.check_pipe_passing()
@@ -34,18 +38,22 @@ class MAIN:
         self.pipes.draw_pipes()
 
     def inputs(self, event):
-        if event.key == pygame.K_w or event.key == pygame.K_UP:
-            if self.snake.last_moved_direction.y != 1:
-                self.snake.direction = V2(0, -1)   
-        if event.key == pygame.K_s or event.key == pygame.K_DOWN:
-            if self.snake.last_moved_direction.y != -1:
-                self.snake.direction = V2(0, 1) 
-        if event.key == pygame.K_a or event.key == pygame.K_LEFT:
-            if self.snake.last_moved_direction.x != 1:
-                self.snake.direction = V2(-1, 0)
-        if event.key == pygame.K_d or event.key == pygame.K_RIGHT:
-            if self.snake.last_moved_direction.x != -1:
-                self.snake.direction = V2(1, 0)
+
+        current_dir = self.input_queue[-1] if self.input_queue else self.snake.last_moved_direction
+
+        if len(self.input_queue) < 2 :
+            if event.key == pygame.K_w or event.key == pygame.K_UP:
+                if current_dir.y != 1 and (not self.input_queue or self.input_queue[-1] != V2(0,-1)):
+                    self.snake.direction = V2(0, -1)
+            if event.key == pygame.K_s or event.key == pygame.K_DOWN:
+                if current_dir.y != 1 and (not self.input_queue or self.input_queue[-1] != V2(0,1)):
+                        self.snake.direction = V2(0, 1) 
+            if event.key == pygame.K_a or event.key == pygame.K_LEFT:
+                if current_dir.x != 1 and (not self.input_queue or self.input_queue[-1] != V2(-1,0)):
+                    self.snake.direction = V2(-1, 0)
+            if event.key == pygame.K_d or event.key == pygame.K_RIGHT:
+                if current_dir.x != 1 and (not self.input_queue or self.input_queue[-1] != V2(1,0)):
+                    self.snake.direction = V2(1, 0)
 
     def check_snake_fruit_collision(self):
         head = self.snake.body[0]
