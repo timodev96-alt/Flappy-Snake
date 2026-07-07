@@ -58,7 +58,7 @@ class MAIN:
 
     def check_lose(self):
         head = self.snake.body[0]
-        if not 0 <= head.x < cell_number or not 0 <= head.y < cell_number:
+        if not -1 <= head.x < cell_number+1 or not -1 <= head.y < cell_number+1:
             print(f'[Debug] Snake out of bounds')
             self.game_over()
 
