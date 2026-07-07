@@ -20,7 +20,7 @@ bg_x_pos = 0
 bg_scroll_speed = 1
 
 while True:
-    for event in pygame.event.get(): 
+    for event in pygame.event.get():
         if event.type == pygame.QUIT:
             print(f'Final Score {main_game.score}')
             pygame.quit()

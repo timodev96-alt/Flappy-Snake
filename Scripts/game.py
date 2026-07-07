@@ -6,12 +6,14 @@ from settings import cell_size, cell_number, pipe_speed
 from snake import SNAKE
 from fruit import FRUIT
 from pipes import PIPES
+from bird import BIRD
 
 class MAIN:
     def __init__(self):
         self.snake = SNAKE()
         self.fruit = FRUIT()
         self.pipes = PIPES()
+        self.bird  = BIRD()
         self.snake_timer = 0
         self.score = 0
 
@@ -21,6 +23,7 @@ class MAIN:
         self.pipes.move_pipes()
         self.pipes.check_and_spawn()
         self.check_lose()
+        self.bird.update()
         self.check_snake_body_pipe_collision()
 
         self.snake_timer += 1
@@ -36,24 +39,25 @@ class MAIN:
         self.fruit.draw_fruit()
         self.snake.draw_snake()
         self.pipes.draw_pipes()
+        self.bird.draw_bird()
 
     def inputs(self, event):
 
         current_dir = self.input_queue[-1] if self.input_queue else self.snake.last_moved_direction
 
-        if len(self.input_queue) < 2 :
+        if len(self.input_queue) < 2:
             if event.key == pygame.K_w or event.key == pygame.K_UP:
-                if current_dir.y != 1 and (not self.input_queue or self.input_queue[-1] != V2(0,-1)):
-                    self.snake.direction = V2(0, -1)
-            if event.key == pygame.K_s or event.key == pygame.K_DOWN:
-                if current_dir.y != 1 and (not self.input_queue or self.input_queue[-1] != V2(0,1)):
-                        self.snake.direction = V2(0, 1) 
-            if event.key == pygame.K_a or event.key == pygame.K_LEFT:
-                if current_dir.x != 1 and (not self.input_queue or self.input_queue[-1] != V2(-1,0)):
-                    self.snake.direction = V2(-1, 0)
-            if event.key == pygame.K_d or event.key == pygame.K_RIGHT:
-                if current_dir.x != 1 and (not self.input_queue or self.input_queue[-1] != V2(1,0)):
-                    self.snake.direction = V2(1, 0)
+                if current_dir.y != 1 and (not self.input_queue or self.input_queue[-1] != V2(0, -1)):
+                    self.input_queue.append(V2(0, -1))   
+            elif event.key == pygame.K_s or event.key == pygame.K_DOWN:
+                if current_dir.y != -1 and (not self.input_queue or self.input_queue[-1] != V2(0, 1)):
+                    self.input_queue.append(V2(0, 1)) 
+            elif event.key == pygame.K_a or event.key == pygame.K_LEFT:
+                if current_dir.x != 1 and (not self.input_queue or self.input_queue[-1] != V2(-1, 0)):
+                    self.input_queue.append(V2(-1, 0))
+            elif event.key == pygame.K_d or event.key == pygame.K_RIGHT:
+                if current_dir.x != -1 and (not self.input_queue or self.input_queue[-1] != V2(1, 0)):
+                    self.input_queue.append(V2(1, 0))
 
     def check_snake_fruit_collision(self):
         head = self.snake.body[0]
