@@ -11,6 +11,10 @@ screen_cords = cell_number * cell_size
 pipe_speed = 2
 top_bottom_pipe_space = 4
 pipe_to_pipe_space = 500
+initial_pipe_delay = 90
+
+#Snake Settings
+SNAKE_SIZE_SCALE = 1.19
 
 # Color Settings
 BG_COLOR = (10, 23, 250)

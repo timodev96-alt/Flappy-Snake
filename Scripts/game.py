@@ -1,14 +1,14 @@
 #game.py
 import pygame
-import sys
 import random
 from pygame.math import Vector2 as V2
-from settings import cell_size, cell_number, pipe_speed
+from settings import cell_size, cell_number, pipe_speed, SNAKE_SIZE_SCALE
 from snake import SNAKE
 from fruit import FRUIT
 from pipes import PIPES
 from bird import BIRD
 
+BODY_PIPE_HITBOX = 0.8 * SNAKE_SIZE_SCALE
 
 def _in_pipe_gap(pipe, y):
     return pipe['top_end'] <= y < pipe['bottom_start']
@@ -22,13 +22,20 @@ class MAIN:
         self.bird = BIRD()
         self.snake_timer = 0
         self.score = 0
+        self.is_over = False
 
         self.input_queue = []
 
     def update(self):
+        if self.is_over:
+            return
+
         self.pipes.move_pipes()
         self.pipes.check_and_spawn()
         self.check_lose()
+        if self.is_over:
+            return
+
         self.bird.update()
         self.check_snake_body_pipe_collision()
 
@@ -94,7 +101,7 @@ class MAIN:
         for pipe in self.pipes.pipes_list:
             pipe_grid_x = pipe['x'] / cell_size
             for block in self.snake.body:
-                if abs(block.x - pipe_grid_x) < 0.8 and not _in_pipe_gap(pipe, block.y):
+                if abs(block.x - pipe_grid_x) < BODY_PIPE_HITBOX and not _in_pipe_gap(pipe, block.y):
                     push_needed = max(push_needed, pipe_speed / cell_size)
 
         if push_needed:
@@ -102,9 +109,9 @@ class MAIN:
                 block.x -= push_needed
 
     def game_over(self):
-        print(f'Final Score {self.score}')
-        pygame.quit()
-        sys.exit()
+        if not self.is_over:
+            print(f'Final Score {self.score}')
+            self.is_over = True
 
     def check_pipe_passing(self):
         snake_head = self.snake.body[0]

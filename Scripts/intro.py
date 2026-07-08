@@ -31,10 +31,11 @@ def _make_sound(freq_start, freq_end, duration, volume=0.35, kind="sine"):
     except Exception: return None
 
 class INTRO:
-    def __init__(self):
+    def __init__(self, high_score=0):
         self.state = WAIT
         self.timer = 0
         self.blink_timer = 0
+        self.high_score = high_score
 
         self.native_screen = sprites.screen
         self.work = pygame.Surface(self.native_screen.get_size()).convert()
@@ -115,7 +116,7 @@ class INTRO:
             self.snake.body = [V2(self.snake_x_float - i, self.bird_row) for i in range(4)]
             self.snake.prev_body = [V2(b) for b in self.snake.body]
 
-    def _update_hover(self):
+    def _update_hover_physics(self):
         self.hop_vel += self.hop_gravity
         self.hop_offset += self.hop_vel
         if self.hop_offset > self.hop_max_drop:
@@ -123,9 +124,15 @@ class INTRO:
             self.hop_vel = self.hop_flap_impulse
 
         self.bird.pos.y = self.bird.center_y + self.hop_offset
-        self.bird.frame_index += 0.25 if self.hop_vel < 0 else 0.08
+
+    def _update_wing_animation(self, fast):
+        self.bird.frame_index += 0.25 if fast else 0.08
         if self.bird.frame_index >= len(self.bird.frames):
             self.bird.frame_index = 0
+
+    def _update_hover(self):
+        self._update_hover_physics()
+        self._update_wing_animation(self.hop_vel < 0)
 
     def update(self):
         self.blink_timer += 1
@@ -135,7 +142,11 @@ class INTRO:
             self._update_hover()
 
         elif self.state == APPROACH:
-            self._update_hover()
+            # Keep the wings flapping for feel, but stop the vertical bob once
+            # the chase starts - otherwise the bird keeps drifting away from
+            # the row the snake is locked onto, and they end up nowhere near
+            # each other by the time the snake arrives.
+            self._update_wing_animation(fast=True)
             self._update_approach_lerp()
 
         elif self.state == FREEZE:
@@ -352,8 +363,17 @@ class INTRO:
             self.work.blit(title_outline, (tx + dx, ty + dy))
         self.work.blit(title, (tx, ty))
 
+        high_score_label = f"HIGH SCORE: {self.high_score}"
+        high_score_text = self.font_small.render(high_score_label, True, (255, 255, 255))
+        high_score_outline = self.font_small.render(high_score_label, True, (20, 20, 30))
+        hx = settings.screen_cords // 2 - high_score_text.get_width() // 2
+        hy = ty + title.get_height() + 18
+        for dx, dy in [(-2, 0), (2, 0), (0, -2), (0, 2)]:
+            self.work.blit(high_score_outline, (hx + dx, hy + dy))
+        self.work.blit(high_score_text, (hx, hy))
+
         if (self.blink_timer // 24) % 2 == 0:
-            prompt = self.font_small.render("PRESS ANY KEY TO START", True, (240, 240, 255))
+            prompt = self.font_small.render("PRESS ANY KEY TO FLY", True, (240, 240, 255))
             px = settings.screen_cords // 2 - prompt.get_width() // 2
             py = settings.screen_cords - 140
             self.work.blit(prompt, (px, py))

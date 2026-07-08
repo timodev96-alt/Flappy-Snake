@@ -36,6 +36,7 @@ class SNAKE:
         self.direction = V2(1, 0)
         self.last_moved_direction = V2(1, 0)
         self.new_block = False
+        self._scaled_cache = {}
 
         sprites.snake_graphics(self)
 
@@ -63,16 +64,32 @@ class SNAKE:
 
             x_pos = int(smooth_x * settings.cell_size)
             y_pos = int(smooth_y * settings.cell_size)
-            block_rect = pygame.Rect(x_pos, y_pos, settings.cell_size, settings.cell_size)
+            block_size = int(settings.cell_size * settings.SNAKE_SIZE_SCALE)
+            centering_offset = (block_size - settings.cell_size) // 2
+            draw_pos = (x_pos - centering_offset, y_pos - centering_offset)
 
             if index == 0:
-                sprites.screen.blit(self.head, block_rect)
+                sprites.screen.blit(self._get_scaled(self.head, block_size), draw_pos)
             elif index == len(self.body) - 1:
-                sprites.screen.blit(self.tail, block_rect)
+                sprites.screen.blit(self._get_scaled(self.tail, block_size), draw_pos)
             else:
                 sprite = self._body_segment_sprite(rounded_body, index)
                 if sprite is not None:
-                    sprites.screen.blit(sprite, block_rect)
+                    sprites.screen.blit(self._get_scaled(sprite, block_size), draw_pos)
+
+    def _get_scaled(self, sprite, size):
+        # pygame's blit() ignores a destination Rect's width/height - it only
+        # uses its position - so to actually change the drawn size we have to
+        # scale the source image itself. Cache the result per (sprite, size)
+        # so we're not re-scaling the same image every single frame.
+        if size == settings.cell_size:
+            return sprite
+        key = (id(sprite), size)
+        cached = self._scaled_cache.get(key)
+        if cached is None:
+            cached = pygame.transform.smoothscale(sprite, (size, size))
+            self._scaled_cache[key] = cached
+        return cached
 
     def _body_segment_sprite(self, rounded_body, index):
         previous_block = rounded_body[index + 1] - rounded_body[index]
