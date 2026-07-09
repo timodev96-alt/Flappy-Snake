@@ -97,7 +97,7 @@ class INTRO:
         if os.path.exists(path):
             try:
                 pygame.mixer.music.load(path)
-                pygame.mixer.music.set_volume(0.15)
+                pygame.mixer.music.set_volume(settings.music_volume)
                 pygame.mixer.music.play(loops=loops, fade_ms=fade_ms)
             except Exception as e:
                 print(f"Audio stream error loading {path}: {e}")
@@ -142,10 +142,6 @@ class INTRO:
             self._update_hover()
 
         elif self.state == APPROACH:
-            # Keep the wings flapping for feel, but stop the vertical bob once
-            # the chase starts - otherwise the bird keeps drifting away from
-            # the row the snake is locked onto, and they end up nowhere near
-            # each other by the time the snake arrives.
             self._update_wing_animation(fast=True)
             self._update_approach_lerp()
 
@@ -263,6 +259,9 @@ class INTRO:
 
     def is_done(self):
         return self.state == DONE
+
+    def is_waiting(self):
+        return self.state == WAIT
 
     def final_snake_state(self):
         body = [V2(round(block.x), round(block.y)) for block in self.snake.body]

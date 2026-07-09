@@ -2,16 +2,19 @@
 import pygame
 import random
 from pygame.math import Vector2 as V2
-from settings import cell_size, cell_number, pipe_speed, SNAKE_SIZE_SCALE
+import settings
+from settings import cell_size, cell_number
 from snake import SNAKE
 from fruit import FRUIT
 from pipes import PIPES
 from bird import BIRD
 
-BODY_PIPE_HITBOX = 0.8 * SNAKE_SIZE_SCALE
 
 def _in_pipe_gap(pipe, y):
     return pipe['top_end'] <= y < pipe['bottom_start']
+
+def _body_pipe_hitbox():
+    return 0.8 * settings.SNAKE_SIZE_SCALE
 
 
 class MAIN:
@@ -98,11 +101,12 @@ class MAIN:
 
     def check_snake_body_pipe_collision(self):
         push_needed = 0
+        hitbox = _body_pipe_hitbox()
         for pipe in self.pipes.pipes_list:
             pipe_grid_x = pipe['x'] / cell_size
             for block in self.snake.body:
-                if abs(block.x - pipe_grid_x) < BODY_PIPE_HITBOX and not _in_pipe_gap(pipe, block.y):
-                    push_needed = max(push_needed, pipe_speed / cell_size)
+                if abs(block.x - pipe_grid_x) < hitbox and not _in_pipe_gap(pipe, block.y):
+                    push_needed = max(push_needed, settings.pipe_speed / cell_size)
 
         if push_needed:
             for block in self.snake.body:

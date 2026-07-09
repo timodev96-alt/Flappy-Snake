@@ -2,14 +2,14 @@
 import pygame
 import random
 import sprites
-from settings import cell_size, cell_number, top_bottom_pipe_space, pipe_speed, pipe_to_pipe_space, initial_pipe_delay
+import settings
+from settings import cell_size, cell_number, top_bottom_pipe_space, pipe_to_pipe_space, initial_pipe_delay
 from sprites import pipe_rim_top, pipe_rim_bottom, pipe_body_sprite
 
 class PIPES:
     def __init__(self):
         self.pipes_list = []
         self.pipe_gap = top_bottom_pipe_space
-        self.pipe_speed = pipe_speed
         self.spawn_delay = initial_pipe_delay
         self.delay_timer = 0
         self.first_spawned = False
@@ -29,7 +29,7 @@ class PIPES:
 
     def move_pipes(self):
         for pipe in self.pipes_list:
-            pipe['x'] -= self.pipe_speed
+            pipe['x'] -= settings.pipe_speed
         self.pipes_list = [pipe for pipe in self.pipes_list if pipe['x'] >= -cell_size]
 
     def draw_pipes(self):
