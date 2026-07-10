@@ -4,7 +4,6 @@ from pygame.math import Vector2 as V2
 import settings
 import sprites
 
-# direction (dx, dy) -> sprite attribute name
 _HEAD_SPRITES = {
     (1, 0): 'head_left',
     (-1, 0): 'head_right',
@@ -17,7 +16,6 @@ _TAIL_SPRITES = {
     (0, 1): 'tail_up',
     (0, -1): 'tail_down',
 }
-# corner is fully determined by the unordered pair of incoming/outgoing directions
 _CORNER_SPRITES = {
     frozenset({(-1, 0), (0, -1)}): 'body_tl',
     frozenset({(-1, 0), (0, 1)}): 'body_bl',
@@ -78,16 +76,21 @@ class SNAKE:
                     sprites.screen.blit(self._get_scaled(sprite, block_size), draw_pos)
 
     def _get_scaled(self, sprite, size):
-        # pygame's blit() ignores a destination Rect's width/height - it only
-        # uses its position - so to actually change the drawn size we have to
-        # scale the source image itself. Cache the result per (sprite, size)
-        # so we're not re-scaling the same image every single frame.
-        if size == settings.cell_size:
-            return sprite
-        key = (id(sprite), size)
+        current_tint = settings.EQUIPPED_SNAKE_COLOR
+        key = (id(sprite), size, current_tint)
         cached = self._scaled_cache.get(key)
         if cached is None:
-            cached = pygame.transform.smoothscale(sprite, (size, size))
+            if size != settings.cell_size:
+                scaled_surface = pygame.transform.smoothscale(sprite, (size, size))
+            else:
+                scaled_surface = sprite.copy()
+            
+            if current_tint != (255, 255, 255):
+                tint_surface = pygame.Surface(scaled_surface.get_size(), pygame.SRCALPHA)
+                tint_surface.fill((*current_tint, 255))
+                scaled_surface.blit(tint_surface, (0, 0), special_flags=pygame.BLEND_RGBA_MULT)
+                
+            cached = scaled_surface
             self._scaled_cache[key] = cached
         return cached
 

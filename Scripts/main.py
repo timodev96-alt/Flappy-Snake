@@ -12,6 +12,7 @@ from game import MAIN
 from intro import INTRO
 from death import DEATH
 from menu import SETTINGS_MENU, PAUSE_MENU, RESUME, RETURN_TO_TITLE, OPEN_SETTINGS
+from shop import SHOP
 
 clock = pygame.time.Clock()
 
@@ -31,7 +32,6 @@ def draw_scrolling_bg(target_surface):
     target_surface.blit(bg_surface, (bg_x_pos, crop_y))
     target_surface.blit(bg_surface, (bg_x_pos + zoomed_width, crop_y))
 
-
 def run_settings_menu(background_snapshot):
     menu = SETTINGS_MENU()
     while not menu.is_done():
@@ -49,6 +49,21 @@ def run_settings_menu(background_snapshot):
         pygame.display.update()
         clock.tick(60)
 
+def run_shop_menu(background_snapshot):
+    shop = SHOP()
+    while not shop.is_done():
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == SCREEN_UPDATE:
+                shop.update()
+            if event.type == pygame.KEYDOWN:
+                shop.handle_event(event)
+        screen.blit(background_snapshot,(0,0))
+        shop.draw(screen)
+        pygame.display.update()
+        clock.tick(60)
 
 def run_intro(high_score):
     intro = INTRO(high_score)
@@ -62,6 +77,8 @@ def run_intro(high_score):
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE and intro.is_waiting():
                     run_settings_menu(screen.copy())
+                elif event.key == pygame.K_s and intro.is_waiting():
+                    run_shop_menu(screen.copy()) 
                 else:
                     intro.handle_event(event)
 
@@ -73,7 +90,6 @@ def run_intro(high_score):
         pygame.display.update()
         clock.tick(60)
     return intro
-
 
 def run_pause_menu(main_game):
     pause_menu = PAUSE_MENU()

@@ -127,6 +127,9 @@ class PAUSE_MENU:
     def is_done(self):
         return self.result is not None and self.result != OPEN_SETTINGS
 
+    def update(self):
+        pass
+
     def handle_event(self, event):
         if event.type != pygame.KEYDOWN:
             return
