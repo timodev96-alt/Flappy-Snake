@@ -147,7 +147,6 @@ def run_game(intro):
                     if result == RETURN_TO_TITLE:
                         pygame.mixer.music.fadeout(400)
                         return "return_to_title", main_game
-                    # RESUME: just keep playing
                 else:
                     main_game.inputs(event)
 
