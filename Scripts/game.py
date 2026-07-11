@@ -79,8 +79,10 @@ class MAIN:
             self.fruit.randomize()
             self.snake.add_block()
             fruit_points = random.randint(49, 74)
-            print(f'[Debug] Eat apple. added: {fruit_points}')
             self.score += fruit_points
+            settings.player_coins += settings.COINS_PER_APPLE
+            settings.save_game_data()
+            print(f'[Debug] Eat apple. +{fruit_points} score, +{settings.COINS_PER_APPLE} coins (total {settings.player_coins})')
 
     def check_lose(self):
         head = self.snake.body[0]

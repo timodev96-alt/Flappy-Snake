@@ -6,6 +6,7 @@ if script_dir not in sys.path:
     sys.path.insert(0, script_dir)
 
 import pygame
+import settings
 from settings import screen_cords
 from sprites import screen, bg_surface, zoomed_width, zoomed_height
 from game import MAIN
@@ -78,7 +79,8 @@ def run_intro(high_score):
                 if event.key == pygame.K_ESCAPE and intro.is_waiting():
                     run_settings_menu(screen.copy())
                 elif event.key == pygame.K_s and intro.is_waiting():
-                    run_shop_menu(screen.copy()) 
+                    run_shop_menu(screen.copy())
+                    intro.refresh_skin()
                 else:
                     intro.handle_event(event)
 
@@ -177,7 +179,7 @@ def run_death(main_game):
         pygame.display.update()
         clock.tick(60)
 
-high_score = 0
+high_score = settings.high_score
 
 while True:
     intro = run_intro(high_score)
@@ -185,4 +187,6 @@ while True:
 
     if outcome == "died":
         high_score = max(high_score, main_game.score)
+        settings.high_score = high_score
+        settings.save_game_data()
         run_death(main_game)

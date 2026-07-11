@@ -25,7 +25,6 @@ SETTINGS_ITEMS = [
     },
 ]
 
-
 def _closest_choice_index(choices, current_value):
     values = [v for _, v in choices]
     return min(range(len(values)), key=lambda i: abs(values[i] - current_value))
@@ -78,6 +77,7 @@ class SETTINGS_MENU:
         setattr(settings, item["attr"], new_value)
         if item["attr"] == "music_volume":
             pygame.mixer.music.set_volume(new_value)
+        settings.save_game_data()
 
     def update(self):
         pass
@@ -141,7 +141,7 @@ class PAUSE_MENU:
             self.selected = (self.selected + 1) % len(self.OPTIONS)
         elif event.key in (pygame.K_RETURN, pygame.K_SPACE):
             self.result = self.OPTIONS[self.selected][1]
-            
+
     def draw(self, surface):
         overlay = pygame.Surface(surface.get_size(), pygame.SRCALPHA)
         overlay.fill((10, 10, 20, 195))

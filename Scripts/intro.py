@@ -94,9 +94,10 @@ class INTRO:
         self._dash_sound_played = False
 
     def _play_bg_music(self, path, loops=-1, fade_ms=0):
-        if os.path.exists(path):
+        resolved_path = settings.get_resource_path(path)
+        if os.path.exists(resolved_path):
             try:
-                pygame.mixer.music.load(path)
+                pygame.mixer.music.load(resolved_path)
                 pygame.mixer.music.set_volume(settings.music_volume)
                 pygame.mixer.music.play(loops=loops, fade_ms=fade_ms)
             except Exception as e:
@@ -263,6 +264,9 @@ class INTRO:
     def is_waiting(self):
         return self.state == WAIT
 
+    def refresh_skin(self):
+        sprites.snake_graphics(self.snake, settings.EQUIPPED_SNAKE_SKIN)
+
     def final_snake_state(self):
         body = [V2(round(block.x), round(block.y)) for block in self.snake.body]
         return body, V2(self.snake.direction), V2(self.snake.last_moved_direction)
@@ -376,3 +380,30 @@ class INTRO:
             px = settings.screen_cords // 2 - prompt.get_width() // 2
             py = settings.screen_cords - 140
             self.work.blit(prompt, (px, py))
+
+        self._draw_coin_balance()
+        self._draw_menu_buttons()
+
+    def _draw_coin_balance(self):
+        coin_text = self.font_small.render(str(settings.player_coins), True, (255, 255, 255))
+        coin_radius = 12
+        cx = settings.screen_cords - 34 - coin_text.get_width() - 24
+        cy = 34
+        pygame.draw.circle(self.work, (255, 215, 0), (cx, cy), coin_radius)
+        pygame.draw.circle(self.work, (150, 110, 0), (cx, cy), coin_radius, width=2)
+        self.work.blit(coin_text, (cx + coin_radius + 10, cy - coin_text.get_height() // 2))
+
+    def _draw_pill_button(self, key_hint, label, x, y, width, height=42):
+        pill = pygame.Surface((width, height), pygame.SRCALPHA)
+        pill_rect = pill.get_rect()
+        pygame.draw.rect(pill, (18, 18, 32, 210), pill_rect, border_radius=height // 2)
+        pygame.draw.rect(pill, (255, 215, 0, 255), pill_rect, width=2, border_radius=height // 2)
+        text = self.font_small.render(f"{key_hint}  {label}", True, (235, 235, 245))
+        pill.blit(text, (pill_rect.centerx - text.get_width() // 2, pill_rect.centery - text.get_height() // 2))
+        self.work.blit(pill, (x, y))
+
+    def _draw_menu_buttons(self):
+        button_width = 190
+        y = settings.screen_cords - 60
+        self._draw_pill_button("ESC", "SETTINGS", 30, y, button_width)
+        self._draw_pill_button("S", "SHOP", settings.screen_cords - 30 - button_width, y, button_width)

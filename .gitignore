@@ -1,2 +1,5 @@
 __pycache__/
 ToDos.md
+FlappySnake.spec
+tests/
+test_persistence.py

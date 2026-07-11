@@ -23,7 +23,6 @@ _CORNER_SPRITES = {
     frozenset({(1, 0), (0, 1)}): 'body_br',
 }
 
-
 def _sign(value):
     return 1 if value > 0 else (-1 if value < 0 else 0)
 
@@ -36,7 +35,7 @@ class SNAKE:
         self.new_block = False
         self._scaled_cache = {}
 
-        sprites.snake_graphics(self)
+        sprites.snake_graphics(self, settings.EQUIPPED_SNAKE_SKIN)
 
     def draw_snake(self, timer_value=9.0):
         if hasattr(self, 'prev_body') and self.prev_body:
@@ -76,21 +75,10 @@ class SNAKE:
                     sprites.screen.blit(self._get_scaled(sprite, block_size), draw_pos)
 
     def _get_scaled(self, sprite, size):
-        current_tint = settings.EQUIPPED_SNAKE_COLOR
-        key = (id(sprite), size, current_tint)
+        key = (id(sprite), size)
         cached = self._scaled_cache.get(key)
         if cached is None:
-            if size != settings.cell_size:
-                scaled_surface = pygame.transform.smoothscale(sprite, (size, size))
-            else:
-                scaled_surface = sprite.copy()
-            
-            if current_tint != (255, 255, 255):
-                tint_surface = pygame.Surface(scaled_surface.get_size(), pygame.SRCALPHA)
-                tint_surface.fill((*current_tint, 255))
-                scaled_surface.blit(tint_surface, (0, 0), special_flags=pygame.BLEND_RGBA_MULT)
-                
-            cached = scaled_surface
+            cached = pygame.transform.smoothscale(sprite, (size, size)) if size != settings.cell_size else sprite
             self._scaled_cache[key] = cached
         return cached
 
