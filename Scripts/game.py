@@ -1,6 +1,7 @@
 #game.py
 import pygame
 import random
+import math
 from pygame.math import Vector2 as V2
 import settings
 from settings import cell_size, cell_number
@@ -26,6 +27,7 @@ class MAIN:
         self.snake_timer = 0
         self.score = 0
         self.is_over = False
+        self._pipe_push_active=False
 
         self.input_queue = []
 
@@ -102,17 +104,25 @@ class MAIN:
                 self.game_over()
 
     def check_snake_body_pipe_collision(self):
-        push_needed = 0
         hitbox = _body_pipe_hitbox()
+        colliding = False
         for pipe in self.pipes.pipes_list:
             pipe_grid_x = pipe['x'] / cell_size
             for block in self.snake.body:
                 if abs(block.x - pipe_grid_x) < hitbox and not _in_pipe_gap(pipe, block.y):
-                    push_needed = max(push_needed, settings.pipe_speed / cell_size)
-
-        if push_needed:
+                    colliding = True
+                    break
+            if colliding:
+                break
+        if colliding:
+            push_amount = settings.pipe_speed / cell_size
             for block in self.snake.body:
-                block.x -= push_needed
+                block.x -= push_amount
+            self._pipe_push_active = True
+        elif self._pipe_push_active:
+            for blcok in self.snake.body:
+                blcok.x = round(blcok.x)
+            self._pipe_push_active= False
 
     def game_over(self):
         if not self.is_over:
