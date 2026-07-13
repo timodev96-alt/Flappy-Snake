@@ -16,8 +16,12 @@ SKIN_DIR = 'Graphics/Snake'
 def _load(path):
     return pygame.image.load(settings.get_resource_path(path)).convert_alpha()
 
+apple = _load(f'{LEGACY_DIR}/apple.png') # temp
 
-apple = _load(f'{LEGACY_DIR}/apple.png')
+APPLE_SPRITES = {}
+APPLE_SPRITES['golden'] = _load(f'{LEGACY_DIR}/bird_mid.png') # JUST FOR TESTING 
+APPLE_SPRITES['normal'] = _load(f'{LEGACY_DIR}/apple.png')
+
 bg_surface_raw = pygame.image.load(settings.get_resource_path(f'{LEGACY_DIR}/bglong.png')).convert()
 zoomed_width = int(screen_cords * 2)
 zoomed_height = int(screen_cords * 1.5)

@@ -31,6 +31,8 @@ class MAIN:
 
         self.input_queue = []
 
+        pygame.font.init()
+        self.score_font = pygame.font.SysFont("Arial",32,bold= True)
     def update(self):
         if self.is_over:
             return
@@ -58,6 +60,25 @@ class MAIN:
         self.snake.draw_snake()
         self.pipes.draw_pipes()
 
+    def draw_score_overlay(self, target_surface):
+        score_text = f"Score: {self.score}"
+        text_surf = self.score_font.render(score_text, True, settings.COLOR_SCORE_TEXT)
+        text_rect = text_surf.get_rect()
+
+        padding_x = 20
+        padding_y = 10
+        width = text_rect.width +(padding_x*2)
+        hight = text_rect.height +(padding_y*2)
+
+        x_pos = (target_surface.get_width()-width) // 2
+        y_pos = 20
+
+        panel_surf = pygame.Surface((width,hight),pygame.SRCALPHA)
+        pygame.draw.rect(panel_surf , settings.COLOR_SCORE_BG,(0,0,width,hight),border_radius=12)
+        pygame.draw.rect(panel_surf, settings.COLOR_SCORE_BORDER, (0, 0, width, hight), width=2, border_radius=12)
+
+        panel_surf.blit(text_surf, (padding_x,padding_y))
+        target_surface.blit(panel_surf,(x_pos,y_pos))
     def inputs(self, event):
         current_dir = self.input_queue[-1] if self.input_queue else self.snake.last_moved_direction
 
@@ -78,13 +99,15 @@ class MAIN:
     def check_snake_fruit_collision(self):
         head = self.snake.body[0]
         if round(head.x) == round(self.fruit.pos.x) and round(head.y) == round(self.fruit.pos.y):
+            apple_type = self.fruit.apple_type
             self.fruit.randomize()
             self.snake.add_block()
-            fruit_points = random.randint(49, 74)
+            fruit_points = random.randint(apple_type["score_min"], apple_type["score_max"])
             self.score += fruit_points
-            settings.player_coins += settings.COINS_PER_APPLE
+            coins_earned = apple_type["coins"]
+            settings.player_coins += coins_earned
             settings.save_game_data()
-            print(f'[Debug] Eat apple. +{fruit_points} score, +{settings.COINS_PER_APPLE} coins (total {settings.player_coins})')
+            print(f'[Debug] Eat apple.')
 
     def check_lose(self):
         head = self.snake.body[0]

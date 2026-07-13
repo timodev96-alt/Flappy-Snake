@@ -28,18 +28,39 @@ SNAKE_SIZE_SCALE = 1.2
 music_volume = 0.6
 MUSIC_VOLUME_STEP = 0.05
 
-BG_COLOR = (10, 23, 250)
-FRUIT_COLOR = (194, 54, 22)
-PIPE_COLOR = (34, 139, 30)
+COLOR_SCORE_TEXT = (255,255,255)
+COLOR_SCORE_BG = (20,20,20,160)
+COLOR_SCORE_BORDER = (255,170,0)
 
 player_coins = 0
-COINS_PER_APPLE = 5
+player_coins = 0
+
+APPLE_TYPES = [
+    {
+        "id" : "normal",
+        "name" : "Apple",
+        "chance" : 0.98 , 
+        "score_min" : 49 , 
+        "score_max" : 74 , 
+        "coins" : 5,
+        "sprite" : "normal"
+    },
+    {
+        "id" : "golden",
+        "name" : "Golden Apple",
+        "chance" : 0.02 , 
+        "score_min" : 142 ,
+        "score_max" : 173 , 
+        "coins" : 15,
+        "sprite" : "golden"
+    },
+]
 
 SNAKE_SKINS = [
     {"id": "classic",     "name": "Classic",     "folder": None,          "cost": 0},
-    {"id": "coral_snake", "name": "Coral Snake", "folder": "Coral Snake", "cost": 5},
-    {"id": "green_mamba", "name": "Green Mamba", "folder": "Green",       "cost": 5},
-    {"id": "milk_snake",  "name": "Milk Snake",  "folder": "Milk Snake",  "cost": 5},
+    {"id": "coral_snake", "name": "Coral Snake", "folder": "Coral Snake", "cost": 500},
+    {"id": "green_mamba", "name": "Green Mamba", "folder": "Green",       "cost": 700},
+    {"id": "milk_snake",  "name": "Milk Snake",  "folder": "Milk Snake",  "cost": 900},
 ]
 
 purchased_skins = {"classic"}

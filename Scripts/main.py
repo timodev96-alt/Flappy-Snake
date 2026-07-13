@@ -152,11 +152,11 @@ def run_game(intro):
 
         draw_scrolling_bg(screen)
         main_game.draw_elements()
+        main_game.draw_score_overlay(screen)
         pygame.display.update()
         clock.tick(60)
 
     return "died", main_game
-
 
 def run_death(main_game):
     death = DEATH(main_game.snake, main_game.pipes, main_game.fruit, main_game.score)
