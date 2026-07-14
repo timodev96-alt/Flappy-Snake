@@ -25,7 +25,8 @@ def _make_sound(freq_start, freq_end, duration, volume=0.35, kind="sine"):
         elif kind == "square": wave = np.sign(np.sin(phase))
         else: wave = np.sin(phase)
         envelope = np.linspace(1, 0, n) ** 1.5
-        wave = (wave * envelope * volume * 32767).astype(np.int16)
+        effective_volume = volume * settings.music_volume
+        wave = (wave * envelope * effective_volume * 32767).astype(np.int16)
         if channels == 2: wave = np.column_stack([wave, wave])
         return pygame.sndarray.make_sound(np.ascontiguousarray(wave))
     except Exception: return None

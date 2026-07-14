@@ -41,7 +41,7 @@ APPLE_TYPES = [
     {
         "id" : "normal",
         "name" : "Apple",
-        "chance" : 0.94 , 
+        "chance" : 0.85 , 
         "score_min" : 49 , 
         "score_max" : 74 , 
         "coins" : 5,
@@ -50,7 +50,7 @@ APPLE_TYPES = [
     {
         "id" : "golden",
         "name" : "Golden Apple",
-        "chance" : 0.02 , 
+        "chance" : 0.05 , 
         "score_min" : 142 ,
         "score_max" : 173 , 
         "coins" : 15,
@@ -59,7 +59,7 @@ APPLE_TYPES = [
     {
         "id" : "shield",
         "name" : "Shield Apple",
-        "chance" : 0.02,
+        "chance" : 0.05,
         "score_min" : 10,
         "score_max" : 20,
         "coins" : 0,
@@ -69,7 +69,7 @@ APPLE_TYPES = [
     {
         "id" : "wide_gap",
         "name" : "Wide Gap Apple",
-        "chance" : 0.02,
+        "chance" : 0.05,
         "score_min" : 10,
         "score_max" : 20,
         "coins" : 0,
