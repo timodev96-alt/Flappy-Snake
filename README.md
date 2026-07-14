@@ -23,8 +23,8 @@
 | Pause / Menu             | ESC                    |
 | Open Shop (title screen) | S                      |
 | Confirm / Select         | `Enter` / `Space`     |
-| Navigate menus           | W S /`↑ ↓`          |
-| Adjust a setting         | A D /`← →`          |
+| Navigate menus           | W S / `↑ ↓`          |
+| Adjust a setting         | A D / `← →`          |
 | Start (title screen)     | Any key                |
 
 ## Dependencies
@@ -84,7 +84,7 @@ Each skin is just **4 images**:
 
 #### Exacley Like This :
 
-Photo
+<img width="240" height="240" alt="Milk Snake" src="https://github.com/user-attachments/assets/5ee9a160-0aa9-41f2-ba97-dcc3a23e063e" />
 
 Also must me rigisterd in `settings.py`:
 
