@@ -22,8 +22,8 @@
 | Move                     | W A S D or Arrow Keys |
 | Pause / Menu             | ESC                    |
 | Open Shop (title screen) | S                      |
-| Confirm / Select         | `Enter` / `Space`      |
-| Navigate menus           | W S`/` `↑ ↓`        |
+| Confirm / Select         | `Enter` / `Space`     |
+| Navigate menus           | W S /`↑ ↓`          |
 | Adjust a setting         | A D /`← →`          |
 | Start (title screen)     | Any key                |
 
@@ -60,12 +60,10 @@ python main.py
 │    ├── menu.py       # Pause menu + Settings menu
 │    └── shop.py       # Snake skin shop
 ├── Graphics/
-│   ├── Old/              # Shared assets: apple, background, bird, pipe,
+│   ├── Other/              Shared assets: apple, background, bird, pipe,
 │   │                      # and the original 14-piece "Classic" snake skin
 │   └── Snake/
-│       ├── Coral Snake/   # head.png, tail.png, body.png, corner.png
-│       ├── Green/
-│       └── Milk Snake/
+│       └── Snake Name/    # head.png, tail.png, body.png, corner.png
 │
 └── Sound Effects/
     ├── Bg_1.mp3   # Gameplay music
