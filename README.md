@@ -1,6 +1,8 @@
 # Flappy-Snake
 
 ### The famous Snake from that old game traveld to the FlappyBird game !
+<img width="850" height="848" alt="image" src="https://github.com/user-attachments/assets/1793912d-39fc-4924-8515-6b1fbe08f735" />
+
 
 ##### A combination of dual games mechanics -Grid moving system for the snake and pipes moving system from flappy bird!- All chained together with a push system to make everything buttery SMOOTH !
 
