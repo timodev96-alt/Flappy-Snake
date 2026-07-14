@@ -22,6 +22,9 @@ PIPE_SPEED_PRESETS = [
     ("MEDIUM", 2.1),
     ("HARD", 2.6),
 ]
+WIDE_GAP_VALUE = 8
+WIDE_GAP_PIPE_COUNT = 5
+
 
 SNAKE_SIZE_SCALE = 1.2
 
@@ -39,7 +42,7 @@ APPLE_TYPES = [
     {
         "id" : "normal",
         "name" : "Apple",
-        "chance" : 0.98 , 
+        "chance" : 0 , 
         "score_min" : 49 , 
         "score_max" : 74 , 
         "coins" : 5,
@@ -48,12 +51,32 @@ APPLE_TYPES = [
     {
         "id" : "golden",
         "name" : "Golden Apple",
-        "chance" : 0.02 , 
+        "chance" : 0 , 
         "score_min" : 142 ,
         "score_max" : 173 , 
         "coins" : 15,
-        "sprite" : "golden"
+        "sprite" : "golden",
     },
+    {
+        "id" : "Shield",
+        "name" : "Shield Apple",
+        "chance" : 0,
+        "score_min" : 10,
+        "score_max" : 20,
+        "coins" : 0,
+        "sprite" : "golden",
+        "effect" : "shield",
+    },
+    {
+        "id" : "wide_gap",
+        "name" : "Wide Gap Apple",
+        "chance" : 1,
+        "score_min" : 10,
+        "score_max" : 20,
+        "coins" : 0,
+        "sprite" : "golden",
+        "effect" : "wide_gap",
+    }
 ]
 
 SNAKE_SKINS = [

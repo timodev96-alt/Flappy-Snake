@@ -9,15 +9,28 @@ from sprites import pipe_rim_top, pipe_rim_bottom, pipe_body_sprite
 class PIPES:
     def __init__(self):
         self.pipes_list = []
-        self.pipe_gap = top_bottom_pipe_space
         self.spawn_delay = initial_pipe_delay
         self.delay_timer = 0
         self.first_spawned = False
 
+        self.wide_gap_pipes_remaining = 0
+
+    def activate_wide_gap(self , pipe_count):
+        self.wide_gap_pipes_remaining = pipe_count
+        
+    def _current_gap(self):
+        if self.wide_gap_pipes_remaining > 0 :
+            return settings.WIDE_GAP_VALUE
+        return settings.top_bottom_pipe_space
+
     def spawn_pipe(self):
+        gap = self._current_gap()
+        if self.wide_gap_pipes_remaining > 0:
+            self.wide_gap_pipes_remaining -= 1
+
         x_pixel_pos = cell_number * cell_size
-        top_pipe_end = random.randint(2, cell_number - self.pipe_gap - 2)
-        bottom_pipe_start = top_pipe_end + self.pipe_gap
+        top_pipe_end = random.randint(2, cell_number - gap - 2)
+        bottom_pipe_start = top_pipe_end + gap
         new_pipe = {
             'x': x_pixel_pos,
             'top_end': top_pipe_end,
@@ -57,6 +70,9 @@ class PIPES:
             if self.delay_timer >= self.spawn_delay:
                 self.spawn_pipe()
                 self.first_spawned = True
+            return
+        if not self.pipes_list:
+            self.spawn_pipe()
             return
 
         last_pipe = self.pipes_list[-1]

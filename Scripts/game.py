@@ -28,6 +28,7 @@ class MAIN:
         self.score = 0
         self.is_over = False
         self._pipe_push_active=False
+        self.has_shield = False
 
         self.input_queue = []
 
@@ -107,7 +108,17 @@ class MAIN:
             coins_earned = apple_type["coins"]
             settings.player_coins += coins_earned
             settings.save_game_data()
+            
+            self._apply_apple_effect(apple_type.get("effect"))
             print(f'[Debug] Eat apple.')
+
+    def _apply_apple_effect(self , effect):
+        if effect == "shield":
+            self.has_shield = True
+            print(f"[DEBUG] yay we got shield !")
+        elif effect == "wide_gap":
+            self.pipes.activate_wide_gap(settings.WIDE_GAP_PIPE_COUNT)
+            print(f'[DEBUG] Next {settings.WIDE_GAP_PIPE_COUNT} pipes will be wided')
 
     def check_lose(self):
         head = self.snake.body[0]
@@ -123,8 +134,17 @@ class MAIN:
         for pipe in self.pipes.pipes_list:
             pipe_grid_x = pipe['x'] // cell_size
             if round(head.x) == pipe_grid_x and not _in_pipe_gap(pipe, head.y):
-                print("[Debug] Snake head hit a pipe!")
-                self.game_over()
+                if self.has_shield:
+                    self._break_pipe(pipe)
+                else:
+                    print("[Debug] Snake head hit a pipe!")
+                    self.game_over()
+
+    def _break_pipe(self,pipe):
+        self.has_shield = False
+        if pipe in self.pipes.pipes_list:
+            self.pipes.pipes_list.remove(pipe)
+        print(f"[DEBUG] Pipe break")
 
     def check_snake_body_pipe_collision(self):
         hitbox = _body_pipe_hitbox()
