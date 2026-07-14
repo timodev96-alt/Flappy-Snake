@@ -2,7 +2,6 @@
 import pygame
 import settings
 
-
 class SHOP:
     def __init__(self):
         self.done = False
@@ -18,11 +17,16 @@ class SHOP:
         self.start_y = 190
         self.padding = 36
 
+        self.scroll_y = 0.0
+        self.target_scroll_y = 0.0
+        self.view_min_y = 170
+        self.view_max_y = settings.screen_cords - 80
+
         self.previews = {skin["id"]: self._load_preview(skin) for skin in settings.SNAKE_SKINS}
 
     def _load_preview(self, skin):
-        folder = skin["folder"]
-        path = f'Graphics/Snake/{folder}/head.png' if folder else 'Graphics/Old/head_right.png'
+        folder = skin["folder"] or settings.get_default_skin()["folder"]
+        path = f'Graphics/Snake/{folder}/head.png'
         try:
             img = pygame.image.load(settings.get_resource_path(path)).convert_alpha()
         except Exception as e:
@@ -63,12 +67,28 @@ class SHOP:
         settings.save_game_data()
 
     def update(self):
-        pass
+        card_normal_y = self.start_y + self.selected_index * (self.card_height + self.card_gap)
+        view_height = self.view_max_y - self.view_min_y
+        center_of_view = self.view_min_y+view_height / 2
+        ideal_scroll = center_of_view - (card_normal_y + self.card_height/2)
+
+        self.target_scroll_y = min(0.0,ideal_scroll)
+        self.scroll_y += (self.target_scroll_y - self.scroll_y) * 0.2
 
     def draw(self, surface):
         overlay = pygame.Surface(surface.get_size(), pygame.SRCALPHA)
         overlay.fill((10, 10, 20, 220))
         surface.blit(overlay, (0, 0))
+
+        total_height = self.start_y + len(settings.SNAKE_SKINS) * (self.card_height + self.card_gap)
+        card_container = pygame.Surface((settings.screen_cords,settings.screen_cords), pygame.SRCALPHA)
+        for i, skin in enumerate(settings.SNAKE_SKINS):
+            self._draw_skin_card(card_container, i , skin)
+        surface.blit(card_container, (0,int(self.scroll_y)))
+
+        header_bar = pygame.Surface((settings.screen_cords, self.view_min_y), pygame.SRCALPHA)
+        header_bar.fill((10,10,20,240))
+        surface.blit(header_bar,(0,0))
 
         title = self.font_title.render("SNAKE SHOP", True, (255, 215, 0))
         title_outline = self.font_title.render("SNAKE SHOP", True, (20, 20, 30))
@@ -80,8 +100,10 @@ class SHOP:
 
         self._draw_coin_balance(surface)
 
-        for i, skin in enumerate(settings.SNAKE_SKINS):
-            self._draw_skin_card(surface, i, skin)
+        fotter_y = self.view_max_y +10
+        fotter_bar = pygame.Surface((settings.screen_cords,settings.screen_cords - fotter_y), pygame.SRCALPHA)
+        fotter_bar.fill((10,10,20,240))
+        fotter_bar.blit(fotter_bar, (0,fotter_y))
 
         hint = self.font_hint.render("W/S TO SELECT     ENTER TO BUY / EQUIP     ESC TO EXIT", True, (200, 200, 210))
         hx = settings.screen_cords // 2 - hint.get_width() // 2

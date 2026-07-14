@@ -36,62 +36,71 @@ COLOR_SCORE_BG = (20,20,20,160)
 COLOR_SCORE_BORDER = (255,170,0)
 
 player_coins = 0
-player_coins = 0
 
 APPLE_TYPES = [
     {
         "id" : "normal",
         "name" : "Apple",
-        "chance" : 0 , 
+        "chance" : 0.94 , 
         "score_min" : 49 , 
         "score_max" : 74 , 
         "coins" : 5,
-        "sprite" : "normal"
+        "sprite" : "Red_apple.png"
     },
     {
         "id" : "golden",
         "name" : "Golden Apple",
-        "chance" : 0 , 
+        "chance" : 0.02 , 
         "score_min" : 142 ,
         "score_max" : 173 , 
         "coins" : 15,
-        "sprite" : "golden",
+        "sprite" : "Golden_apple.png",
     },
     {
-        "id" : "Shield",
+        "id" : "shield",
         "name" : "Shield Apple",
-        "chance" : 0,
+        "chance" : 0.02,
         "score_min" : 10,
         "score_max" : 20,
         "coins" : 0,
-        "sprite" : "golden",
+        "sprite" : "Blue_apple.png",
         "effect" : "shield",
     },
     {
         "id" : "wide_gap",
         "name" : "Wide Gap Apple",
-        "chance" : 1,
+        "chance" : 0.02,
         "score_min" : 10,
         "score_max" : 20,
         "coins" : 0,
-        "sprite" : "golden",
+        "sprite" : "Green_apple.png",
         "effect" : "wide_gap",
     }
 ]
 
 SNAKE_SKINS = [
-    {"id": "classic",     "name": "Classic",     "folder": None,          "cost": 0},
-    {"id": "coral_snake", "name": "Coral Snake", "folder": "Coral Snake", "cost": 500},
-    {"id": "green_mamba", "name": "Green Mamba", "folder": "Green",       "cost": 700},
-    {"id": "milk_snake",  "name": "Milk Snake",  "folder": "Milk Snake",  "cost": 900},
+    {"id":"green_snake","name": "Green Snake","folder": "Green Snake","cost": 0},
+    {"id":"black_snake","name": "Black Snake","folder": "Black Snake","cost": 0},
+    {"id":"blue_snake","name": "Blue Snake","folder": "Blue Snake","cost": 0},
+    {"id":"coral_snake","name": "Coral Snake","folder": "Coral Snake","cost": 0},
+    {"id":"milk_snake","name": "Milk Snake","folder": "Milk Snake","cost": 0},
+    {"id":"orange_snake","name": "Orange Snake","folder": "Orange Snake","cost": 0},
+    {"id":"purble_snake","name": "Purble Snake","folder": "Purble Snake","cost": 0},
+    {"id":"red_snake","name": "Red Snake","folder": "Red Snake","cost": 0},
+    {"id":"ribbon_snake","name": "Ribbon Snake","folder": "Ribbon Snake","cost": 0},
+    {"id":"russell's_viper_snake","name": "Russell's Viper Snake","folder": "Russell's Viper Snake","cost": 0},
+    {"id":"yellow_snake","name": "Yellow Snake","folder": "Yellow Snake","cost": 0},
 ]
+DEFAULT_SNAKE_SKIN_ID = "green_snake"
 
-purchased_skins = {"classic"}
-EQUIPPED_SNAKE_SKIN = None
+def get_default_skin():
+    return next(s for s in SNAKE_SKINS if s["id"]== DEFAULT_SNAKE_SKIN_ID)
+
+purchased_skins = {DEFAULT_SNAKE_SKIN_ID}
+EQUIPPED_SNAKE_SKIN = get_default_skin()["folder"]
 high_score = 0
 
 ROOT_DIR = Path(__file__).resolve().parent.parent
-
 
 def get_resource_path(*relative_parts):
     candidates = []

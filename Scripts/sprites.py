@@ -9,25 +9,33 @@ pygame.init()
 
 screen = pygame.display.set_mode((screen_cords, screen_cords))
 
-LEGACY_DIR = 'Graphics/Old'
+OTHER_DIR = 'Graphics/Other'
 SKIN_DIR = 'Graphics/Snake'
 
+DEFAULT_SKIN_FOLDER = settings.get_default_skin()["folder"]
+APPLE_DISPLAY_SIZE = 40
 
 def _load(path):
     return pygame.image.load(settings.get_resource_path(path)).convert_alpha()
 
-apple = _load(f'{LEGACY_DIR}/apple.png') # temp
+def _load_apple(filename):
+    return pygame.transform.smoothscale(_load(f'{OTHER_DIR}/{filename}'),(APPLE_DISPLAY_SIZE , APPLE_DISPLAY_SIZE))
 
-APPLE_SPRITES = {}
-APPLE_SPRITES['golden'] = _load(f'{LEGACY_DIR}/bird_mid.png') # JUST FOR TESTING 
-APPLE_SPRITES['normal'] = _load(f'{LEGACY_DIR}/apple.png')
+APPLE_SPRITES = {
+    'normal' : _load_apple('Red_apple.png'),
+    'golden' : _load_apple('Golden_apple.png'),
+    'shield' : _load_apple('Blue_apple.png'),
+    'wide_gap' : _load_apple('Green_apple.png'),
+}
 
-bg_surface_raw = pygame.image.load(settings.get_resource_path(f'{LEGACY_DIR}/bglong.png')).convert()
+apple = APPLE_SPRITES['normal']
+
+bg_surface_raw = pygame.image.load(settings.get_resource_path(f'{OTHER_DIR}/bglong.png')).convert()
 zoomed_width = int(screen_cords * 2)
 zoomed_height = int(screen_cords * 1.5)
 bg_surface = pygame.transform.smoothscale(bg_surface_raw, (zoomed_width, zoomed_height))
 
-pipe_raw = _load(f'{LEGACY_DIR}/pipe.png')
+pipe_raw = _load(f'{OTHER_DIR}/pipe.png')
 pipe_w = pipe_raw.get_width()
 pipe_h = pipe_raw.get_height()
 rim_height = int(pipe_h * 0.25)
@@ -40,18 +48,7 @@ BIRD_SPRITE_FILES = {
 
 def Bird_graphics(self):
     for attr, filename in BIRD_SPRITE_FILES.items():
-        setattr(self, attr, _load(f'{LEGACY_DIR}/{filename}.png'))
-
-LEGACY_SNAKE_NAMES = [
-    'head_up', 'head_down', 'head_right', 'head_left',
-    'tail_up', 'tail_down', 'tail_right', 'tail_left',
-    'body_vertical', 'body_horizontal',
-    'body_tr', 'body_tl', 'body_br', 'body_bl',
-]
-
-
-def _load_legacy_snake_sprites():
-    return {name: _load(f'{LEGACY_DIR}/{name}.png') for name in LEGACY_SNAKE_NAMES}
+        setattr(self, attr, _load(f'{OTHER_DIR}/{filename}.png'))
 
 def _load_skin_snake_sprites(skin_folder):
     def frame(part):
@@ -88,7 +85,7 @@ def _load_skin_snake_sprites(skin_folder):
 
 
 def snake_graphics(self, skin_folder=None):
-    sprite_map = _load_legacy_snake_sprites() if skin_folder is None else _load_skin_snake_sprites(skin_folder)
+    sprite_map = _load_skin_snake_sprites(skin_folder or DEFAULT_SKIN_FOLDER)
     for name, surf in sprite_map.items():
         setattr(self, name, surf)
 

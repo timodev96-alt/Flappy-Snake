@@ -78,7 +78,7 @@ class SNAKE:
         key = (id(sprite), size)
         cached = self._scaled_cache.get(key)
         if cached is None:
-            cached = pygame.transform.smoothscale(sprite, (size, size)) if size != settings.cell_size else sprite
+            cached = sprites if sprite.get_size() == (size , size) else pygame.transform.smoothscale(sprite,(size,size))
             self._scaled_cache[key] = cached
         return cached
 
