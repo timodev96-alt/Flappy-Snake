@@ -31,6 +31,7 @@
 ## Apples
  
 Apples aren't all the same — each one that spawns is rolled from a weighted pool:
+<img width="960" height="240" alt="Milk Snake(1)" src="https://github.com/user-attachments/assets/f7748c95-610a-4108-bfcd-e41f65b4b4da" />
  
 | Apple        | Chance | Score      | Coins | Effect |
 |--------------|--------|------------|-------|--------|
