@@ -11,8 +11,9 @@
 * Amazing cutscenes for starting the game and death ! -First time to do that (: -
 * Pause & Settings menu - pipe speed (Easy / Medium / Hard) and music volume, adjustable live, even mid-game.
 * **Coins & Shop** - every apple you eat earns coins; spend them in the shop to unlock and equip new snake skins.
-* Skin system - Alot of skins :D
-* JSON file  so your settings,coins,skins and highscore can be saved localy
+* Special apples with unique effects (see below)
+* A growing library of unlockable Snake Skins!! - Alot of skins :D
+* Local save file (JSON) so your settings, coins, skins, and high score persist between sessions
 
 ## Controles
 
@@ -27,6 +28,21 @@
 | Adjust a setting         | A D / `← →`          |
 | Start (title screen)     | Any key                |
 
+## Apples
+ 
+Apples aren't all the same — each one that spawns is rolled from a weighted pool:
+ 
+| Apple        | Chance | Score      | Coins | Effect |
+|--------------|--------|------------|-------|--------|
+| Apple (red)  | 85%    | 49–74      | 5     | — |
+| Golden Apple (Golden?) | 5%     | 142–173    | 15    | — |
+| Shield Apple (Blue) | 5%     | 10–20      | 0     | Grants a one-time shield that lets you smash through the next pipe you'd otherwise die on |
+| Wide Gap Apple (Green) | 5%   | 10–20      | 0     | Widens the gap on the next 5 pipes, making them easier to pass |
+ 
+Passing safely through a pipe's gap also earns you **9–23 points**.
+ 
+---
+
 ## Dependencies
 
 * `Python 3.10+`
@@ -40,7 +56,7 @@ pip install pygame numpy
 python main.py
 ```
 
-#### Or just download the .exe file Here!
+#### Or just grab the pre-built `.exe` if one is available for your release!
 
 ## Project Structure
 
