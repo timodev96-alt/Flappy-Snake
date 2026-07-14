@@ -14,12 +14,12 @@ class SHOP:
 
         self.card_height = 74
         self.card_gap = 14
-        self.start_y = 190
+        self.start_y = 100
         self.padding = 36
 
         self.scroll_y = 0.0
         self.target_scroll_y = 0.0
-        self.view_min_y = 170
+        self.view_min_y = 80
         self.view_max_y = settings.screen_cords - 80
 
         self.previews = {skin["id"]: self._load_preview(skin) for skin in settings.SNAKE_SKINS}
@@ -81,7 +81,7 @@ class SHOP:
         surface.blit(overlay, (0, 0))
 
         total_height = self.start_y + len(settings.SNAKE_SKINS) * (self.card_height + self.card_gap)
-        card_container = pygame.Surface((settings.screen_cords,settings.screen_cords), pygame.SRCALPHA)
+        card_container = pygame.Surface((settings.screen_cords, total_height), pygame.SRCALPHA)
         for i, skin in enumerate(settings.SNAKE_SKINS):
             self._draw_skin_card(card_container, i , skin)
         surface.blit(card_container, (0,int(self.scroll_y)))
@@ -93,7 +93,7 @@ class SHOP:
         title = self.font_title.render("SNAKE SHOP", True, (255, 215, 0))
         title_outline = self.font_title.render("SNAKE SHOP", True, (20, 20, 30))
         tx = settings.screen_cords // 2 - title.get_width() // 2
-        ty = 86
+        ty = 20
         for dx, dy in [(-3, 0), (3, 0), (0, -3), (0, 3), (-2, -2), (2, 2)]:
             surface.blit(title_outline, (tx + dx, ty + dy))
         surface.blit(title, (tx, ty))

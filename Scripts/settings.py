@@ -80,16 +80,16 @@ APPLE_TYPES = [
 
 SNAKE_SKINS = [
     {"id":"green_snake","name": "Green Snake","folder": "Green Snake","cost": 0},
-    {"id":"black_snake","name": "Black Snake","folder": "Black Snake","cost": 0},
-    {"id":"blue_snake","name": "Blue Snake","folder": "Blue Snake","cost": 0},
-    {"id":"coral_snake","name": "Coral Snake","folder": "Coral Snake","cost": 0},
-    {"id":"milk_snake","name": "Milk Snake","folder": "Milk Snake","cost": 0},
-    {"id":"orange_snake","name": "Orange Snake","folder": "Orange Snake","cost": 0},
-    {"id":"purble_snake","name": "Purble Snake","folder": "Purble Snake","cost": 0},
-    {"id":"red_snake","name": "Red Snake","folder": "Red Snake","cost": 0},
-    {"id":"ribbon_snake","name": "Ribbon Snake","folder": "Ribbon Snake","cost": 0},
-    {"id":"russell's_viper_snake","name": "Russell's Viper Snake","folder": "Russell's Viper Snake","cost": 0},
-    {"id":"yellow_snake","name": "Yellow Snake","folder": "Yellow Snake","cost": 0},
+    {"id":"red_snake","name": "Red Snake","folder": "Red Snake","cost": 100},
+    {"id":"orange_snake","name": "Orange Snake","folder": "Orange Snake","cost": 200},
+    {"id":"yellow_snake","name": "Yellow Snake","folder": "Yellow Snake","cost": 250},
+    {"id":"blue_snake","name": "Blue Snake","folder": "Blue Snake","cost": 300},
+    {"id":"purble_snake","name": "Purble Snake","folder": "Purble Snake","cost": 350},
+    {"id":"black_snake","name": "Black Snake","folder": "Black Snake","cost": 400},
+    {"id":"coral_snake","name": "Coral Snake","folder": "Coral Snake","cost": 600},
+    {"id":"milk_snake","name": "Milk Snake","folder": "Milk Snake","cost": 800},
+    {"id":"russell's_viper_snake","name": "Russell's Viper Snake","folder": "Russell's Viper Snake","cost": 1000},
+    {"id":"ribbon_snake","name": "Ribbon Snake","folder": "Ribbon Snake","cost": 1500},
 ]
 DEFAULT_SNAKE_SKIN_ID = "green_snake"
 
