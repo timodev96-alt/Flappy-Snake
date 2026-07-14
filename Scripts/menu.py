@@ -39,12 +39,14 @@ def _display_value(item):
 
 
 class SETTINGS_MENU:
-    def __init__(self):
+    def __init__(self , locked_attr= None):
         self.selected = 0
         self.done = False
+        self.locked_attr =locked_attr or set()
         self.font_title = pygame.font.Font(None, 60)
         self.font_item = pygame.font.Font(None, 36)
         self.font_hint = pygame.font.Font(None, 24)
+        self.font_lock_note = pygame.font.Font(None,20)
 
     def is_done(self):
         return self.done
@@ -65,6 +67,8 @@ class SETTINGS_MENU:
 
     def _adjust(self, direction):
         item = SETTINGS_ITEMS[self.selected]
+        if item['attr'] in self.locked_attr:
+            return
         current = getattr(settings, item["attr"])
 
         if item["kind"] == "choice":
@@ -94,18 +98,26 @@ class SETTINGS_MENU:
         start_y = 210
         gap = 60
         for i, item in enumerate(SETTINGS_ITEMS):
+            locked = item['attr'] in self.locked_attr
             line = f"{item['label']}: {_display_value(item)}"
-            color = (255, 230, 120) if i == self.selected else (225, 225, 230)
+
+            if locked:
+                color = (105,105,112)
+            else:
+                color = (255, 230, 120) if i == self.selected else (225, 225, 230)
             text = self.font_item.render(line, True, color)
             x = settings.screen_cords // 2 - text.get_width() // 2
             y = start_y + i * gap
-            if i == self.selected:
+            if i == self.selected and not locked:
                 arrow_l = self.font_item.render("<", True, color)
                 arrow_r = self.font_item.render(">", True, color)
                 surface.blit(arrow_l, (x - 34, y))
                 surface.blit(arrow_r, (x + text.get_width() + 14, y))
             surface.blit(text, (x, y))
-
+            if locked:
+                note = self.font_lock_note.render("LOCKED DURING PLAY", True, (150, 150, 158))
+                nx = settings.screen_cords // 2 - note.get_width() // 2
+                surface.blit(note, (nx, y + 30))
         hint = self.font_hint.render("ARROWS TO ADJUST     ESC TO GO BACK", True, (200, 200, 210))
         hx = settings.screen_cords // 2 - hint.get_width() // 2
         surface.blit(hint, (hx, settings.screen_cords - 70))

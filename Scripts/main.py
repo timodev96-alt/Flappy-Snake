@@ -33,8 +33,8 @@ def draw_scrolling_bg(target_surface):
     target_surface.blit(bg_surface, (bg_x_pos, crop_y))
     target_surface.blit(bg_surface, (bg_x_pos + zoomed_width, crop_y))
 
-def run_settings_menu(background_snapshot):
-    menu = SETTINGS_MENU()
+def run_settings_menu(background_snapshot , locked_attr=None):
+    menu = SETTINGS_MENU(locked_attr=locked_attr)
     while not menu.is_done():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -108,7 +108,7 @@ def run_pause_menu(main_game):
             if event.type == pygame.KEYDOWN:
                 pause_menu.handle_event(event)
                 if pause_menu.result == OPEN_SETTINGS:
-                    run_settings_menu(snapshot)
+                    run_settings_menu(snapshot, locked_attr="pipe_speed")
                     pause_menu.result = None
 
         screen.blit(snapshot, (0, 0))
