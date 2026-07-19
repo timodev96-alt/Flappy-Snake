@@ -65,30 +65,6 @@ python main.py
 ## Project Structure
 
 ```
-.
-├─ Scripts/
-│    ├── main.py       # Entry point: intro -> game -> death loop, menu wiring
-│    ├── settings.py   # Every tunable value in the game lives here
-│    ├── sprites.py    # Loads all art, builds skin sprites from 4-piece sets
-│    ├── snake.py      # Snake state, movement, and rendering
-│    ├── pipes.py      # Pipe spawning, movement, rendering
-│    ├── fruit.py      # Apple spawning and rendering
-│    ├── bird.py       # The bird used in the intro cutscene
-│    ├── game.py       # Core gameplay loop: collisions, scoring, coins
-│    ├── intro.py      # Title screen + bird-chase cutscene
-│    ├── death.py      # Death animation (shake -> fade -> game over screen)
-│    ├── menu.py       # Pause menu + Settings menu
-│    └── shop.py       # Snake skin shop
-├── Graphics/
-│   ├── Other/              Shared assets: apple, background, bird, pipe,
-│   │                      # and the original 14-piece "Classic" snake skin
-│   └── Snake/
-│       └── Snake Name/    # head.png, tail.png, body.png, corner.png
-│
-└── Sound Effects/
-    ├── Bg_1.mp3   # Gameplay music
-    └── Bg_2.mp3   # Title screen music
-```
 
 # Snake Skins system
 
