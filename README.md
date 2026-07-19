@@ -62,10 +62,6 @@ python main.py
 #### Or just grab the pre-built [.exe](https://github.com/timodev96-alt/Flappy-Snake/releases/download/Main/FlappySnake.exe) if one is available for your release! 
 
 
-## Project Structure
-
-```
-
 # Snake Skins system
 
 Each skin is just **4 images**:
