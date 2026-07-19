@@ -4,18 +4,18 @@
 <img width="850" height="848" alt="image" src="https://github.com/user-attachments/assets/1793912d-39fc-4924-8515-6b1fbe08f735" />
 
 
-##### A combination of dual games mechanics -Grid moving system for the snake and pipes moving system from flappy bird!- All chained together with a push system to make everything buttery SMOOTH !
+##### A combination of tow games mechanics -Grid moving system for the snake and pipes moving system from flappy bird!- All combined together to make that amazing beautiful piece of art !
 
 ## Features
 
 * Classic snake movment in 25x25 Grid
 * Flappy Bird-style Pipes scroll all from the right
-* Amazing cutscenes for starting the game and death ! -First time to do that (: -
+* Amazing cutscenes for starting the game and death
 * Pause & Settings menu - pipe speed (Easy / Medium / Hard) and music volume, adjustable live, even mid-game.
-* **Coins & Shop** - every apple you eat earns coins; spend them in the shop to unlock and equip new snake skins.
+* Coins & Shop - Red & Golden apples Gives you coins to spend in the shop!
 * Special apples with unique effects (see below)
-* A growing library of unlockable Snake Skins!! - Alot of skins :D
-* Local save file (JSON) so your settings, coins, skins, and high score persist between sessions
+* library of unlockable Snake Skins! - Alot of skins :D
+* Local save file (JSON) that saves everything
 
 ## Controles
 
@@ -32,13 +32,13 @@
 
 ## Apples
  
-Apples aren't all the same — each one that spawns is rolled from a weighted pool:
+Apples aren't all the same - each one that spawns is rolled from a weighted pool:
 <img width="960" height="240" alt="Milk Snake(1)" src="https://github.com/user-attachments/assets/f7748c95-610a-4108-bfcd-e41f65b4b4da" />
  
 | Apple        | Chance | Score      | Coins | Effect |
 |--------------|--------|------------|-------|--------|
-| Apple (red)  | 85%    | 49–74      | 5     | — |
-| Golden Apple (Golden?) | 5%     | 142–173    | 15    | — |
+| Apple (red)  | 85%    | 49–74      | 5     | - |
+| Golden Apple (Golden?) | 5%     | 142–173    | 15    | - |
 | Shield Apple (Blue) | 5%     | 10–20      | 0     | Grants a one-time shield that lets you smash through the next pipe you'd otherwise die on |
 | Wide Gap Apple (Green) | 5%   | 10–20      | 0     | Widens the gap on the next 5 pipes, making them easier to pass |
  
@@ -64,7 +64,7 @@ python main.py
 
 # Snake Skins system
 
-Each skin is just **4 images**:
+Each skin is just *4 images*:
 
 
 | File         | What it should show                     |
@@ -100,15 +100,15 @@ Here's every gameplay-affecting value and what it's set to at startup:
 
 **Pipes**
 
-* `pipe_speed = 1.9` (active at startup — matches the EASY preset, so the game starts on Easy)
+* `pipe_speed = 1.9` (active at startup - matches the EASY preset, so the game starts on Easy)
 * `PIPE_SPEED_PRESETS`: EASY = 1.9, MEDIUM = 2.1, HARD = 2.6
-* `top_bottom_pipe_space = 4` — vertical gap a snake can pass through, in grid cells
-* `pipe_to_pipe_space = 500` — horizontal pixel gap between consecutive pipes
+* `top_bottom_pipe_space = 4` - vertical gap a snake can pass through, in grid cells
+* `pipe_to_pipe_space = 500` - horizontal pixel gap between consecutive pipes
 * `initial_pipe_delay = 90` frames (\~1.5s at 60fps) before the very first pipe spawns
 
 **Snake**
 
-* `SNAKE_SIZE_SCALE = 1.2` — draw size multiplier (also scales the pipe hitbox slightly bigger than the base 0.8-cell tolerance
+* `SNAKE_SIZE_SCALE = 1.2` - draw size multiplier (also scales the pipe hitbox slightly bigger than the base 0.8-cell tolerance
 * Snake moves once every 9 game-update ticks (hardcoded)
 
 **Scoring & Coins**
@@ -124,3 +124,8 @@ Here's every gameplay-affecting value and what it's set to at startup:
 * Music Volume Step = 0.05 - amount each menu press changes volume by
 
   ### There’s no right or wrong here! - just set them up in a way that makes sense to you.
+
+ ## Want your Own Version?
+ Just change whatever you want and run `build.py`, your new .exe file will be in `/dist` folder
+
+  #### I used minimal AI in this project, Just for the debugging and the cutsecens part(my first time making a cutscene.)
